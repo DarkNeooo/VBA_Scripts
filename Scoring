@@ -1,0 +1,36 @@
+Function scoreGame(predictedScore As Range, gameID As Double) As Double
+    
+    Dim realHomeScore As Double
+    Dim realAwayScore As Double
+    Dim gameIDs, realHomeScores, realAwayScores As Range
+    Dim realScores As TableObject
+    Dim points As Double
+    Dim realResult, predictedResult As Integer
+    Dim predictedHomeScore, predictedAwayScore As Double
+    
+    predictedHomeScore = predictedScore.Cells(1, 1)
+    predictedAwayScore = predictedScore.Cells(1, 3)
+    
+    predictedResult = Sgn(predictedHomeScore - predictedAwayScore)
+    points = 0
+    
+    Set gameIDs = Worksheets("wyniki").ListObjects("scores").ListColumns("ID_GAME").DataBodyRange
+    Set realHomeScores = Worksheets("wyniki").ListObjects("scores").ListColumns("HOME_SCORE").DataBodyRange
+    Set realAwayScores = Worksheets("wyniki").ListObjects("scores").ListColumns("AWAY_SCORE").DataBodyRange
+    
+    realHomeScore = Application.WorksheetFunction.XLookup(gameID, gameIDs, realHomeScores)
+    realAwayScore = Application.WorksheetFunction.XLookup(gameID, gameIDs, realAwayScores)
+    
+    realResult = Sgn(realHomeScore - realAwayScore)
+
+    If realHomeScore = predictedHomeScore And realAwayScore = predictedAwayScore Then
+        points = 3
+    Else
+        If predictedResult = realResult Then
+            points = 1
+        End If
+    End If
+    
+    scoreGame = points
+    
+End Function
