@@ -1,0 +1,60 @@
+Function ranking(position As Double, property As Double) As Variant
+
+    Application.Volatile
+    
+    Dim playersTable As Variant
+    Dim numOfRows As Double
+    
+    playersTable = Worksheets("pomocnicze").ListObjects("points").DataBodyRange
+    
+    numOfRows = UBound(playersTable, 2) + 1
+
+    For i = 1 To numOfRows
+        For j = i + 1 To numOfRows
+            If playersTable(i, 2) < playersTable(j, 2) Then
+
+                sortTable playersTable, i, j
+                
+            Else
+                If playersTable(i, 2) = playersTable(j, 2) Then
+                    If playersTable(i, 3) < playersTable(j, 3) Then
+
+                        sortTable playersTable, i, j
+
+                    Else
+                        If playersTable(i, 3) = playersTable(j, 3) Then
+                            If playersTable(i, 4) < playersTable(j, 4) Then
+
+                                sortTable playersTable, i, j
+
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Next
+    Next
+
+    ranking = playersTable(position, property)
+
+End Function
+
+Private Sub sortTable(ByRef arr As Variant, ByVal i As Double, ByVal j As Double)
+        Dim tempName, tempPoints, tempExactScore, tempExtras As Variant
+        
+        tempName = arr(i, 1)
+        tempPoints = arr(i, 2)
+        tempExactScore = arr(i, 3)
+        tempExtras = arr(i, 4)
+
+        arr(i, 1) = arr(j, 1)
+        arr(i, 2) = arr(j, 2)
+        arr(i, 3) = arr(j, 3)
+        arr(i, 4) = arr(j, 4)
+
+        arr(j, 1) = tempName
+        arr(j, 2) = tempPoints
+        arr(j, 3) = tempExactScore
+        arr(j, 4) = tempExtras
+        
+End Sub
